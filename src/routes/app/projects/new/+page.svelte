@@ -11,7 +11,7 @@
 
 	let { data } = $props();
 
-	const { form, errors, enhance, submitting } = superForm(data.form, {
+	const { form, errors, message, enhance, submitting } = superForm(data.form, {
 		validators: zodClient(createProjectSchema)
 	});
 </script>
@@ -102,6 +102,13 @@
 				<p class="mt-2 text-[11px] text-rust">{$errors.raw_data}</p>
 			{/if}
 		</div>
+
+		<!-- Server error message -->
+		{#if $message}
+			<div class="border border-rust/30 bg-rust/5 px-4 py-3">
+				<p class="text-sm text-rust">{$message}</p>
+			</div>
+		{/if}
 
 		<!-- Actions -->
 		<div class="flex items-center justify-between pt-4 border-t border-rule">

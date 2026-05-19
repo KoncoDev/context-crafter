@@ -8,7 +8,7 @@
 	import ArchitectingDataView from '$lib/components/pipeline/ArchitectingDataView.svelte';
 	import DesigningDataView from '$lib/components/pipeline/DesigningDataView.svelte';
 	import type { Variant, Project } from '$lib/types/pipeline';
-	import { MapPin, Target, Palette, ChevronRight, ChevronDown, ChevronUp } from 'lucide-svelte';
+	import { MapPin, Target, Palette, ChevronRight, ChevronDown, ChevronUp, Brain, Zap, Shield, MessageSquare } from 'lucide-svelte';
 
 	let { data } = $props();
 
@@ -96,6 +96,31 @@
 			done: 'border-moss/40 text-moss'
 		};
 		return `${base} ${states[state]}`;
+	}
+
+	function linkifyText(text: string): string {
+		const escaped = text
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;');
+		return escaped.replace(/https?:\/\/[^\s<>"']+/g, (raw) => {
+			// Strip trailing punctuation captured by the regex (e.g. trailing ) . , ;)
+			const url = raw.replace(/[.,;:)]+$/, '');
+			const trailing = raw.slice(url.length);
+			// Remove UTM tracking params
+			let clean = url;
+			try {
+				const parsed = new URL(url);
+				for (const key of [...parsed.searchParams.keys()]) {
+					if (key.startsWith('utm_')) parsed.searchParams.delete(key);
+				}
+				clean = parsed.toString();
+			} catch {
+				// not a valid URL, leave as-is
+			}
+			return `<a href="${clean}" target="_blank" rel="noopener noreferrer" class="text-bone underline decoration-bone/40 hover:decoration-bone transition-colors">${clean}</a>${trailing}`;
+		});
 	}
 </script>
 
@@ -191,31 +216,47 @@
 						</div>
 					{/if}
 					{#if persona.psychological_driver}
-						<div>
-							<p class="mb-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3">
-								Psychological Driver
-							</p>
-							<p class="text-sm text-ink-2">{persona.psychological_driver}</p>
+						<div class="flex items-start gap-3">
+							<div class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-bone/30 bg-bone/8 text-bone">
+								<Brain class="h-3 w-3" />
+							</div>
+							<div>
+								<p class="mb-1 text-[10px] uppercase tracking-[0.15em] text-ink-3">Psychological Driver</p>
+								<p class="text-sm text-ink-2">{persona.psychological_driver}</p>
+							</div>
 						</div>
 					{/if}
 					{#if persona.buying_trigger}
-						<div>
-							<p class="mb-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3">Buying Trigger</p>
-							<p class="text-sm text-ink-2">{persona.buying_trigger}</p>
+						<div class="flex items-start gap-3">
+							<div class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-ochre/30 bg-ochre/8 text-ochre">
+								<Zap class="h-3 w-3" />
+							</div>
+							<div>
+								<p class="mb-1 text-[10px] uppercase tracking-[0.15em] text-ink-3">Buying Trigger</p>
+								<p class="text-sm text-ink-2">{persona.buying_trigger}</p>
+							</div>
 						</div>
 					{/if}
 					{#if persona.primary_objection}
-						<div>
-							<p class="mb-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3">
-								Primary Objection
-							</p>
-							<p class="text-sm text-ink-2">{persona.primary_objection}</p>
+						<div class="flex items-start gap-3">
+							<div class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-rust/25 bg-rust/8 text-rust">
+								<Shield class="h-3 w-3" />
+							</div>
+							<div>
+								<p class="mb-1 text-[10px] uppercase tracking-[0.15em] text-ink-3">Primary Objection</p>
+								<p class="text-sm text-ink-2">{persona.primary_objection}</p>
+							</div>
 						</div>
 					{/if}
 					{#if persona.preferred_tone}
-						<div>
-							<p class="mb-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3">Preferred Tone</p>
-							<p class="text-sm text-ink-2">{persona.preferred_tone}</p>
+						<div class="flex items-start gap-3">
+							<div class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-moss/30 bg-moss/8 text-moss">
+								<MessageSquare class="h-3 w-3" />
+							</div>
+							<div>
+								<p class="mb-1 text-[10px] uppercase tracking-[0.15em] text-ink-3">Preferred Tone</p>
+								<p class="text-sm text-ink-2">{persona.preferred_tone}</p>
+							</div>
 						</div>
 					{/if}
 				</div>
@@ -283,7 +324,7 @@
 									Market Research Summary
 								</p>
 								<p class="whitespace-pre-wrap text-sm leading-relaxed text-ink-2">
-									{research.internet_research}
+									{@html linkifyText(research.internet_research)}
 								</p>
 							</div>
 						{/if}
@@ -343,7 +384,7 @@
 			{:else if researchDone && variant.researching_data}
 				{@const r = variant.researching_data as Record<string, string>}
 				{#if r.internet_research}
-					<p class="line-clamp-2 text-sm leading-relaxed text-ink-3">{r.internet_research}</p>
+					<p class="line-clamp-2 text-sm leading-relaxed text-ink-3">{@html linkifyText(r.internet_research)}</p>
 				{:else}
 					<p class="text-[11px] text-ink-3">Research data available.</p>
 				{/if}

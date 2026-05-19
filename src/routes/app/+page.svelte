@@ -1,5 +1,6 @@
 <script lang="ts">
 	import StatusBadge from '$lib/components/pipeline/StatusBadge.svelte';
+	import { PROJECT_STATUS_CONFIG } from '$lib/config/pipeline';
 	import type { Project } from '$lib/types/pipeline';
 
 	let { data } = $props();
@@ -55,11 +56,23 @@
 
 		<!-- Ledger rows -->
 		{#each projects as project}
+			{@const statusColor = PROJECT_STATUS_CONFIG[project.status].color}
+			{@const isProcessing = PROJECT_STATUS_CONFIG[project.status].isAIProcessing}
+			{@const isPending = project.status === 'pending_master_validation' || project.status === 'pending_persona_validation'}
 			<a
 				href="/app/projects/{project.id}"
-				class="group grid grid-cols-[1fr_auto_auto_auto_1rem] gap-x-8 items-center py-5 border-b border-rule hover:border-rule-2 hover:bg-panel transition-colors duration-150 active:opacity-75 select-none"
+				class="group relative grid grid-cols-[1fr_auto_auto_auto_1rem] gap-x-8 items-center py-5 border-b border-rule hover:bg-panel transition-colors duration-150 active:opacity-75 select-none overflow-hidden"
 			>
-				<span class="font-display text-2xl font-light text-ink group-hover:text-bone transition-colors leading-tight">
+				<!-- Status color strip -->
+				<span
+					class="absolute left-0 top-0 bottom-0 w-[3px] transition-opacity duration-150 {isProcessing || isPending ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'}"
+					class:bg-parchment={isProcessing}
+					class:bg-ochre={isPending}
+					class:bg-moss={project.status === 'completed'}
+					class:bg-bone={project.status === 'processing_variants' || project.status === 'draft'}
+					class:bg-rust={project.status === 'error'}
+				></span>
+				<span class="pl-3 font-display text-2xl font-light text-ink group-hover:text-bone transition-colors leading-tight">
 					{project.name}
 				</span>
 				<span class="text-[11px] capitalize text-ink-3 font-sans">{project.target_language}</span>

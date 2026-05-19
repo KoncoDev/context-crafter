@@ -6,7 +6,7 @@
 	import StatusBadge from '$lib/components/pipeline/StatusBadge.svelte';
 	import MarkdownEditor from '$lib/components/pipeline/MarkdownEditor.svelte';
 	import { VARIANT_STATUS_CONFIG, AGENT_NAMES } from '$lib/config/pipeline';
-	import type { Project, Variant, Persona } from '$lib/types/pipeline';
+	import type { Project, Variant, Persona, VariantStatus } from '$lib/types/pipeline';
 	import {
 		ScanText,
 		Brain,
@@ -18,7 +18,12 @@
 		Layers,
 		AlertCircle,
 		CheckCircle2,
-		ChevronRight
+		ChevronRight,
+		Pencil,
+		X,
+		Zap,
+		Shield,
+		MessageSquare
 	} from 'lucide-svelte';
 
 	let { data } = $props();
@@ -33,7 +38,7 @@
 		if (data.project) project = data.project as Project;
 	});
 
-	type TabId = 'overview' | 'pipeline' | 'personas' | 'variants';
+	type TabId = 'overview' | 'pipeline' | 'variants';
 	let activeTab = $state<TabId>('overview');
 
 	let triggering = $state(false);
@@ -41,6 +46,22 @@
 	let triggerError = $state<string | null>(null);
 	let approvingPersonas = $state(false);
 	let approvePersonasError = $state<string | null>(null);
+
+	let editing = $state(false);
+	let editSubmitting = $state(false);
+	let editError = $state<string | null>(null);
+	let editName = $state('');
+	let editLanguage = $state<'french' | 'english' | 'arabic'>('english');
+	let editRawData = $state('');
+
+	function openEdit() {
+		if (!project) return;
+		editName = project.name;
+		editLanguage = project.target_language;
+		editRawData = project.raw_data ?? '';
+		editError = null;
+		editing = true;
+	}
 
 	onMount(() => {
 		if (!clientOnlyPb || !project) return;
@@ -85,13 +106,12 @@
 
 	const step2State = $derived((): CardState => {
 		if (!project) return 'waiting';
-		if (['extracting_master', 'pending_master_validation'].includes(project.status)) return 'waiting';
+		if (['draft', 'extracting_master', 'pending_master_validation'].includes(project.status)) return 'waiting';
 		if (project.status === 'generating_personas') return 'processing';
 		if (project.status === 'pending_persona_validation') return 'active';
 		return 'done';
 	});
 
-	const showPersonasTab = $derived(!!project && project.status !== 'draft');
 	const showVariantsTab = $derived(
 		!!project && ['processing_variants', 'completed'].includes(project.status)
 	);
@@ -156,20 +176,32 @@
 	function agentIconClass(state: CardState): string {
 		const base = 'w-9 h-9 border flex items-center justify-center shrink-0 transition-colors';
 		const states: Record<CardState, string> = {
-			waiting: 'border-rule-2 text-ink-3',
-			processing: 'border-parchment/50 text-parchment',
-			active: 'border-ochre/50 text-ochre',
-			done: 'border-moss/40 text-moss'
+			waiting: 'border-rule text-ink-3/50 bg-canvas',
+			processing: 'border-parchment/50 bg-parchment/12 text-parchment',
+			active: 'border-ochre/50 bg-ochre/12 text-ochre',
+			done: 'border-moss/40 bg-moss/12 text-moss'
 		};
 		return `${base} ${states[state]}`;
 	}
 
-	const personaAccents = [
-		'var(--color-bone)',
-		'var(--color-moss)',
-		'var(--color-ochre)',
-		'var(--color-parchment)'
-	];
+	function variantStepStatus(v: Variant) {
+		const s = v.status;
+		return {
+			research: (['architecting', 'designing', 'pending_final_validation', 'completed'].includes(s) ? 'done'
+				: ['researching', 'pending_research_validation'].includes(s) ? 'active' : 'waiting') as CardState,
+			architect: (['designing', 'pending_final_validation', 'completed'].includes(s) ? 'done'
+				: s === 'architecting' ? 'processing' : 'waiting') as CardState,
+			design: (s === 'completed' ? 'done'
+				: ['designing', 'pending_final_validation'].includes(s) ? 'active' : 'waiting') as CardState
+		};
+	}
+
+	function variantAccentColor(status: VariantStatus): string {
+		if (['researching', 'architecting', 'designing'].includes(status)) return 'var(--color-parchment)';
+		if (['pending_research_validation', 'pending_final_validation'].includes(status)) return 'var(--color-ochre)';
+		if (status === 'completed') return 'var(--color-moss)';
+		return 'var(--color-bone)';
+	}
 
 	// Grouped variants for the Variants tab
 	const groupedVariants = $derived({
@@ -222,6 +254,25 @@
 							</button>
 						</form>
 					{/if}
+					{#if !editing}
+						<button
+							type="button"
+							onclick={openEdit}
+							class="select-none flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] text-ink-3 transition-colors duration-150 hover:text-ink active:opacity-75"
+						>
+							<Pencil class="h-3 w-3" />
+							Edit
+						</button>
+					{:else}
+						<button
+							type="button"
+							onclick={() => (editing = false)}
+							class="select-none flex items-center gap-1.5 text-[11px] uppercase tracking-[0.12em] text-ink-3 transition-colors duration-150 hover:text-ink active:opacity-75"
+						>
+							<X class="h-3 w-3" />
+							Cancel
+						</button>
+					{/if}
 					<StatusBadge status={project.status} type="project" />
 				</div>
 			</div>
@@ -244,27 +295,119 @@
 			</div>
 		</div>
 
+		<!-- ── Inline Edit Panel ─────────────────────────── -->
+		{#if editing}
+			<form
+				method="POST"
+				action="?/updateProject"
+				use:enhance={() => {
+					editSubmitting = true;
+					editError = null;
+					return async ({ result, update }) => {
+						editSubmitting = false;
+						if (result.type === 'failure') {
+							editError = (result.data as Record<string, string>)?.message ?? 'Update failed';
+						} else {
+							editing = false;
+							await update();
+						}
+					};
+				}}
+				class="mb-6 border border-rule bg-panel p-6 space-y-6"
+			>
+				<p class="text-[10px] uppercase tracking-[0.2em] text-ink-3">Edit Project</p>
+
+				<div class="grid gap-6 sm:grid-cols-2">
+					<!-- Name -->
+					<div>
+						<label for="edit-name" class="block text-[10px] uppercase tracking-[0.15em] text-ink-3 mb-2">
+							Project Name
+						</label>
+						<div class="border-b border-rule-2 focus-within:border-bone transition-colors duration-200">
+							<input
+								id="edit-name"
+								name="name"
+								type="text"
+								bind:value={editName}
+								class="w-full bg-transparent py-2 text-sm text-ink placeholder-ink-3 focus:outline-none"
+							/>
+						</div>
+					</div>
+
+					<!-- Language -->
+					<div>
+						<label for="edit-language" class="block text-[10px] uppercase tracking-[0.15em] text-ink-3 mb-2">
+							Target Language
+						</label>
+						<div class="border-b border-rule-2 focus-within:border-bone transition-colors duration-200">
+							<select
+								id="edit-language"
+								name="target_language"
+								bind:value={editLanguage}
+								class="w-full bg-transparent py-2 text-sm text-ink focus:outline-none appearance-none cursor-pointer"
+							>
+								<option value="french">French</option>
+								<option value="english">English</option>
+								<option value="arabic">Arabic</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<!-- Raw Data — only editable in draft (extraction hasn't run yet) -->
+				{#if project.status === 'draft'}
+					<div>
+						<label for="edit-raw" class="block text-[10px] uppercase tracking-[0.15em] text-ink-3 mb-2">
+							Raw Input Data
+						</label>
+						<div class="border border-rule focus-within:border-rule-2 transition-colors duration-200">
+							<textarea
+								id="edit-raw"
+								name="raw_data"
+								bind:value={editRawData}
+								rows="10"
+								class="w-full bg-transparent px-4 py-3 font-mono text-xs leading-relaxed text-ink placeholder-ink-3 focus:outline-none resize-y"
+							></textarea>
+						</div>
+					</div>
+				{/if}
+
+				{#if editError}
+					<p class="text-xs text-rust">{editError}</p>
+				{/if}
+
+				<div class="flex items-center gap-6 border-t border-rule pt-4">
+					<button
+						type="submit"
+						disabled={editSubmitting}
+						class="select-none text-[11px] uppercase tracking-[0.2em] border-b pb-0.5 transition-colors duration-150 active:opacity-75 disabled:opacity-40 disabled:cursor-not-allowed {editSubmitting ? 'border-rule-2 text-ink-3' : 'border-ink text-ink hover:border-bone hover:text-bone'}"
+					>
+						{editSubmitting ? 'Saving…' : 'Save Changes →'}
+					</button>
+					<button
+						type="button"
+						onclick={() => (editing = false)}
+						class="select-none text-[11px] uppercase tracking-[0.12em] text-ink-3 transition-colors duration-150 hover:text-ink active:opacity-75"
+					>
+						Cancel
+					</button>
+				</div>
+			</form>
+		{/if}
+
 		<!-- ── Pipeline ribbon ────────────────────────────── -->
-		<div
-			class="mb-6 flex items-center gap-3 text-[10px] uppercase tracking-[0.18em] text-ink-3"
-		>
-			<!-- Step dots -->
+		<div class="mb-6 flex items-center gap-3 text-[10px] uppercase tracking-[0.18em]">
 			{#each [
-				{ num: 1, label: 'Fact Extractor', done: step1State() === 'done', active: step1State() === 'active' || step1State() === 'processing' },
-				{ num: 2, label: 'Consumer Psych.', done: step2State() === 'done', active: step2State() === 'active' || step2State() === 'processing' },
-				{ num: 3, label: 'Variants', done: project.status === 'completed', active: project.status === 'processing_variants' }
+				{ label: 'Fact Extractor', done: step1State() === 'done', processing: step1State() === 'processing', active: step1State() === 'active' },
+				{ label: 'Consumer Psych.', done: step2State() === 'done', processing: step2State() === 'processing', active: step2State() === 'active' },
+				{ label: 'Variants', done: project.status === 'completed', processing: false, active: project.status === 'processing_variants' }
 			] as step, i}
 				{#if i > 0}
-					<div class="h-px flex-1 bg-rule-2 max-w-8"></div>
+					<div class="h-px max-w-8 flex-1 {step.done || step.active || step.processing ? 'bg-rule-2' : 'bg-rule'}"></div>
 				{/if}
-				<span
-					class="transition-colors {step.done
-						? 'text-moss'
-						: step.active
-							? 'text-ink-2'
-							: 'text-ink-3/40'}"
-				>
-					{#if step.done}✓ {/if}{step.label}
+				<span class="flex items-center gap-1.5 transition-colors {step.done ? 'text-moss' : step.active ? 'text-ochre' : step.processing ? 'text-parchment' : 'text-ink-3/40'}">
+					<span class="h-1.5 w-1.5 rounded-full transition-colors {step.done ? 'bg-moss' : step.active ? 'bg-ochre' : step.processing ? 'bg-parchment animate-pulse' : 'bg-rule-2'}"></span>
+					{step.label}
 				</span>
 			{/each}
 		</div>
@@ -276,7 +419,6 @@
 			{#each [
 				{ id: 'overview' as TabId, label: 'Overview', visible: true, badge: null },
 				{ id: 'pipeline' as TabId, label: 'Pipeline', visible: true, badge: pipelineBadge() },
-				{ id: 'personas' as TabId, label: `Personas${personas.length ? ` (${personas.length})` : ''}`, visible: showPersonasTab, badge: null },
 				{ id: 'variants' as TabId, label: `Variants${showVariantsTab && variantsByStatus.total ? ` (${variantsByStatus.total})` : ''}`, visible: showVariantsTab, badge: variantsByStatus.needsAction > 0 ? variantsByStatus.needsAction : null }
 			] as tab}
 				{#if tab.visible}
@@ -285,7 +427,7 @@
 						onclick={() => (activeTab = tab.id)}
 						class="relative mr-6 select-none pb-3 pt-5 text-[11px] uppercase tracking-[0.15em] transition-colors duration-150 active:opacity-75 {activeTab ===
 						tab.id
-							? 'border-b-2 border-ink text-ink'
+							? 'border-b-2 border-bone text-ink'
 							: 'border-b-2 border-transparent text-ink-3 hover:text-ink-2'}"
 					>
 						{tab.label}
@@ -310,8 +452,8 @@
 				<!-- Stats bento -->
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
 					<!-- Variants -->
-					<div class="border border-rule bg-panel px-5 py-5">
-						<div class="mb-3 flex items-center gap-2 text-ink-3">
+					<div class="border border-rule bg-panel px-5 py-5" style="border-left-width: 3px; border-left-color: var(--color-bone)">
+						<div class="mb-3 flex items-center gap-2 text-bone">
 							<Layers class="h-3.5 w-3.5" />
 							<p class="text-[10px] uppercase tracking-[0.2em]">Variants</p>
 						</div>
@@ -335,8 +477,8 @@
 					</div>
 
 					<!-- Personas -->
-					<div class="border border-rule bg-panel px-5 py-5">
-						<div class="mb-3 flex items-center gap-2 text-ink-3">
+					<div class="border border-rule bg-panel px-5 py-5" style="border-left-width: 3px; border-left-color: var(--color-moss)">
+						<div class="mb-3 flex items-center gap-2 text-moss">
 							<Users class="h-3.5 w-3.5" />
 							<p class="text-[10px] uppercase tracking-[0.2em]">Personas</p>
 						</div>
@@ -350,8 +492,8 @@
 					</div>
 
 					<!-- Language / status -->
-					<div class="border border-rule bg-panel px-5 py-5">
-						<div class="mb-3 flex items-center gap-2 text-ink-3">
+					<div class="border border-rule bg-panel px-5 py-5" style="border-left-width: 3px; border-left-color: var(--color-ochre)">
+						<div class="mb-3 flex items-center gap-2 text-ochre">
 							<CheckCircle2 class="h-3.5 w-3.5" />
 							<p class="text-[10px] uppercase tracking-[0.2em]">Language</p>
 						</div>
@@ -420,23 +562,82 @@
 					</div>
 
 				{:else}
-					<!-- draft: raw data preview + redirect hint -->
-					<div class="space-y-5">
-						<div class="border border-rule bg-panel p-5">
-							<p class="mb-3 text-[10px] uppercase tracking-[0.2em] text-ink-3">Raw Input Data</p>
-							<p
-								class="line-clamp-8 whitespace-pre-wrap font-mono text-xs leading-relaxed text-ink-3"
-							>
-								{project.raw_data}
-							</p>
+					<!-- draft: launch CTA -->
+					<div class="space-y-4">
+						<!-- Hero CTA block -->
+						<div class="border border-rule bg-panel px-8 py-8" style="border-left-width: 3px; border-left-color: var(--color-bone)">
+							<div class="mb-6 flex items-start gap-5">
+								<div class="flex h-10 w-10 shrink-0 items-center justify-center border border-bone/40 bg-bone/10 text-bone">
+									<ScanText class="h-4 w-4" />
+								</div>
+								<div>
+									<p class="font-display text-2xl font-light leading-snug text-ink">
+										Ready to begin extraction
+									</p>
+									<p class="mt-1 text-sm leading-relaxed text-ink-3">
+										The Fact Extractor agent will analyse your raw data and produce a structured Master Source document for review.
+									</p>
+								</div>
+							</div>
+
+							{#if triggerSent}
+								<div class="flex items-center gap-3">
+									<svg class="h-3.5 w-3.5 shrink-0 animate-spin text-parchment" fill="none" viewBox="0 0 24 24">
+										<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+										<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+									</svg>
+									<p class="text-sm text-ink-3">Pipeline triggered — waiting for extraction to begin…</p>
+									<button
+										type="button"
+										onclick={() => { triggerSent = false; triggerError = null; }}
+										class="ml-auto select-none text-[11px] tracking-wide text-ink-3 transition-colors hover:text-ink active:opacity-75"
+									>Try again</button>
+								</div>
+							{:else}
+								<form
+									method="POST"
+									action="?/triggerExtraction"
+									use:enhance={() => {
+										triggering = true;
+										triggerError = null;
+										return async ({ result }) => {
+											triggering = false;
+											if (result.type === 'failure') {
+												triggerError = (result.data as Record<string, string>)?.message ?? 'Failed to trigger extraction';
+											} else if (result.type === 'success') {
+												triggerSent = true;
+											}
+										};
+									}}
+								>
+									<div class="flex flex-col gap-3">
+										<button
+											type="submit"
+											disabled={triggering}
+											class="select-none self-start border-b pb-0.5 text-[11px] uppercase tracking-[0.2em] transition-colors duration-150 disabled:opacity-40 active:opacity-75 {triggering ? 'border-rule-2 text-ink-3' : 'border-ink text-ink hover:border-bone hover:text-bone'}"
+										>
+											{triggering ? 'Sending to pipeline…' : 'Run Fact Extractor →'}
+										</button>
+										{#if triggerError}
+											<p class="text-xs text-rust">{triggerError}</p>
+										{/if}
+									</div>
+								</form>
+							{/if}
 						</div>
-						<p class="text-sm text-ink-3">
-							Switch to the <button
-								type="button"
-								class="border-b border-rule-2 pb-0.5 text-ink-2 transition-colors duration-150 hover:text-ink"
-								onclick={() => (activeTab = 'pipeline')}>Pipeline tab</button
-							> to run the Fact Extractor.
-						</p>
+
+						<!-- Raw data preview (collapsible) -->
+						<details class="group border border-rule">
+							<summary class="select-none flex cursor-pointer items-center justify-between px-5 py-3.5 text-[10px] uppercase tracking-[0.2em] text-ink-3 transition-colors duration-150 hover:bg-panel hover:text-ink active:opacity-75 list-none">
+								<span>Raw Input Data</span>
+								<span class="font-mono text-[10px] text-ink-3/60">{(project.raw_data ?? '').length.toLocaleString()} chars</span>
+							</summary>
+							<div class="border-t border-rule bg-panel px-5 py-4">
+								<p class="whitespace-pre-wrap font-mono text-xs leading-relaxed text-ink-3">
+									{project.raw_data}
+								</p>
+							</div>
+						</details>
 					</div>
 				{/if}
 
@@ -686,9 +887,7 @@
 								{#each personas as p, i}
 									<div
 										class="border border-rule bg-panel px-5 py-4"
-										style="border-left-width: 3px; border-left-color: {personaAccents[
-											i % personaAccents.length
-										]}"
+										style="border-left-width: 3px; border-left-color: {(['var(--color-bone)','var(--color-moss)','var(--color-ochre)','var(--color-parchment)'])[i % 4]}"
 									>
 										<div class="mb-2 flex items-start justify-between gap-3">
 											<p class="font-display text-lg font-light leading-tight text-ink">{p.name}</p>
@@ -875,178 +1074,196 @@
 			</div>
 		{/if}
 
-		<!-- ═══════════════════════════════════════════════ -->
-		<!-- TAB: PERSONAS                                   -->
-		<!-- ═══════════════════════════════════════════════ -->
-		{#if activeTab === 'personas'}
-			<div class="mt-8">
-				{#if personas.length === 0}
-					<div class="py-16 text-center">
-						<Users class="mx-auto mb-4 h-8 w-8 text-ink-3/30" />
-						<p class="mb-2 font-display text-2xl font-light text-ink-3">No personas yet</p>
-						<p class="text-sm text-ink-3">
-							Generate personas in the
-							<button
-								type="button"
-								class="border-b border-rule-2 pb-0.5 text-ink-2 transition-colors duration-150 hover:text-ink"
-								onclick={() => (activeTab = 'pipeline')}>Pipeline tab</button
-							>.
-						</p>
-					</div>
-				{:else}
-					<div class="grid gap-5 sm:grid-cols-2">
-						{#each personas as persona, i}
-							<div
-								class="border border-rule bg-panel p-5 space-y-4"
-								style="border-left-width: 3px; border-left-color: {personaAccents[
-									i % personaAccents.length
-								]}"
-							>
-								<!-- Card header -->
-								<div class="flex items-start justify-between gap-3">
-									<p class="font-display text-xl font-light leading-tight text-ink">
-										{persona.name}
-									</p>
-									<span
-										class="shrink-0 border border-rule-2 px-2 py-1 text-[9px] uppercase tracking-[0.1em] text-ink-3"
-									>
-										{persona.target_area}
-									</span>
-								</div>
-
-								{#if persona.demographic_summary}
-									<div>
-										<p class="mb-1 text-[9px] uppercase tracking-[0.15em] text-ink-3">Demographic</p>
-										<p class="text-sm leading-relaxed text-ink-2">{persona.demographic_summary}</p>
-									</div>
-								{/if}
-
-								<!-- Field grid -->
-								<div class="grid grid-cols-2 gap-4 border-t border-rule pt-4">
-									{#if persona.psychological_driver}
-										<div>
-											<p class="mb-1 text-[9px] uppercase tracking-[0.15em] text-ink-3">Driver</p>
-											<p class="text-xs leading-relaxed text-ink-2">
-												{persona.psychological_driver}
-											</p>
-										</div>
-									{/if}
-									{#if persona.buying_trigger}
-										<div>
-											<p class="mb-1 text-[9px] uppercase tracking-[0.15em] text-ink-3">Trigger</p>
-											<p class="text-xs leading-relaxed text-ink-2">{persona.buying_trigger}</p>
-										</div>
-									{/if}
-									{#if persona.primary_objection}
-										<div>
-											<p class="mb-1 text-[9px] uppercase tracking-[0.15em] text-ink-3">
-												Objection
-											</p>
-											<p class="text-xs leading-relaxed text-ink-2">{persona.primary_objection}</p>
-										</div>
-									{/if}
-									{#if persona.preferred_tone}
-										<div>
-											<p class="mb-1 text-[9px] uppercase tracking-[0.15em] text-ink-3">Tone</p>
-											<p class="text-xs leading-relaxed text-ink-2">{persona.preferred_tone}</p>
-										</div>
-									{/if}
-								</div>
-							</div>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		{/if}
 
 		<!-- ═══════════════════════════════════════════════ -->
-		<!-- TAB: VARIANTS                                   -->
+		<!-- TAB: VARIANTS — persona + pipeline cards        -->
 		<!-- ═══════════════════════════════════════════════ -->
 		{#if activeTab === 'variants'}
 			<div class="mt-8">
 				{#if variants.length === 0}
-					<div class="py-16 text-center">
-						<Layers class="mx-auto mb-4 h-8 w-8 text-ink-3/30" />
-						<p class="mb-2 font-display text-2xl font-light text-ink-3">No variants yet</p>
-						<p class="text-sm text-ink-3">
-							Approve personas in the
-							<button
-								type="button"
-								class="border-b border-rule-2 pb-0.5 text-ink-2 transition-colors duration-150 hover:text-ink"
-								onclick={() => (activeTab = 'pipeline')}>Pipeline tab</button
-							>.
-						</p>
+					<div class="py-20 text-center">
+						<Layers class="mx-auto mb-4 h-8 w-8 animate-pulse text-ink-3/30" />
+						<p class="mb-2 font-display text-2xl font-light text-ink-3">Preparing variants…</p>
+						<p class="text-sm text-ink-3">Page updates automatically.</p>
 					</div>
 				{:else}
 					<!-- Summary bar -->
-					<div class="mb-8 flex items-center gap-6 text-sm">
+					<div class="mb-6 flex flex-wrap items-center gap-5 border-b border-rule pb-5 text-[11px]">
 						{#if variantsByStatus.needsAction > 0}
-							<span class="flex items-center gap-2 text-ochre">
-								<AlertCircle class="h-3.5 w-3.5" />
+							<span class="flex items-center gap-1.5 font-medium text-ochre">
+								<AlertCircle class="h-3 w-3" />
 								{variantsByStatus.needsAction} awaiting review
 							</span>
 						{/if}
 						{#if variantsByStatus.inProgress > 0}
-							<span class="text-ink-3">{variantsByStatus.inProgress} in progress</span>
+							<span class="text-parchment">{variantsByStatus.inProgress} in progress</span>
 						{/if}
-						<span class="text-ink-3"
-							>{variantsByStatus.completed}/{variantsByStatus.total} completed</span
-						>
+						{#if variantsByStatus.draft > 0}
+							<span class="text-ink-3">{variantsByStatus.draft} not started</span>
+						{/if}
+						<span class="ml-auto font-medium text-moss">{variantsByStatus.completed}/{variantsByStatus.total} completed</span>
 					</div>
 
-					<!-- ── Awaiting Review group ── -->
-					{#if groupedVariants.needsAction.length > 0}
-						<div class="mb-8">
-							<p
-								class="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-ochre"
-							>
-								<AlertCircle class="h-3 w-3" />
-								Awaiting Review
-							</p>
-							{@render variantGroup(groupedVariants.needsAction, true)}
-						</div>
-					{/if}
-
-					<!-- ── In Progress group ── -->
-					{#if groupedVariants.inProgress.length > 0}
-						<div class="mb-8">
-							<p class="mb-4 text-[10px] uppercase tracking-[0.2em] text-ink-3">In Progress</p>
-							{@render variantGroup(groupedVariants.inProgress, false)}
-						</div>
-					{/if}
-
-					<!-- ── Draft group ── -->
+					<!-- Draft launch prompt -->
 					{#if groupedVariants.draft.length > 0}
-						<div class="mb-8">
-							<p class="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-ink-3">
-								Draft
+						<div class="mb-6 flex items-center justify-between gap-4 border border-dashed border-rule bg-panel/50 px-5 py-3.5">
+							<p class="text-sm text-ink-3">
+								<span class="font-medium text-ink">{groupedVariants.draft.length}</span> variant{groupedVariants.draft.length !== 1 ? 's' : ''} ready to launch
 							</p>
-							<div class="mb-4 border border-dashed border-rule bg-panel/50 px-5 py-3">
-								<p class="text-sm text-ink-3">
-									<span class="font-medium text-ink">{groupedVariants.draft.length}</span> variant{groupedVariants
-										.draft.length !== 1
-										? 's'
-										: ''} ready to launch —
-									<a
-										href="/app/projects/{project.id}/research"
-										class="border-b border-rule-2 pb-0.5 text-ink-2 transition-colors hover:text-ink"
-										>Go to Research Launch →</a
-									>
-								</p>
-							</div>
-							{@render variantGroup(groupedVariants.draft, false)}
+							<a
+								href="/app/projects/{project.id}/research"
+								class="select-none shrink-0 border-b border-ink pb-0.5 text-[11px] uppercase tracking-[0.15em] text-ink transition-colors duration-150 hover:border-bone hover:text-bone active:opacity-75"
+							>Launch Research →</a>
 						</div>
 					{/if}
 
-					<!-- ── Completed group ── -->
-					{#if groupedVariants.completed.length > 0}
-						<div>
-							<p class="mb-4 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-moss">
-								<CheckCircle2 class="h-3 w-3" />
-								Completed
+					{#snippet variantCard(variant: Variant)}
+						{@const persona = variant.expand?.persona}
+						{@const needsAction = ['pending_research_validation', 'pending_final_validation'].includes(variant.status)}
+						{@const steps = variantStepStatus(variant)}
+						<a
+							href="/app/projects/{project.id}/variants/{variant.id}"
+							class="group relative block overflow-hidden border border-rule bg-canvas transition-all duration-200 hover:bg-panel hover:border-rule-2 active:opacity-90"
+						>
+							<span
+								class="absolute left-0 top-0 bottom-0 w-[3px]"
+								style="background-color: {variantAccentColor(variant.status)}"
+							></span>
+							<div class="py-5 pl-6 pr-5">
+								<!-- Header: name + area + status + CTA -->
+								<div class="mb-3 flex items-start justify-between gap-4">
+									<div class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+										<p class="font-display text-xl font-light leading-tight text-ink transition-colors duration-200 group-hover:text-bone">
+											{persona?.name ?? `Variant ${variant.id.slice(0, 6)}`}
+										</p>
+										{#if persona?.target_area}
+											<span class="shrink-0 border border-rule-2 px-1.5 py-0.5 text-[9px] uppercase tracking-[0.12em] text-ink-3">
+												{persona.target_area}
+											</span>
+										{/if}
+									</div>
+									<div class="flex shrink-0 items-center gap-3">
+										<StatusBadge status={variant.status} type="variant" />
+										<span class="text-[10px] uppercase tracking-[0.12em] transition-colors duration-150 {needsAction ? 'text-ochre' : 'text-ink-3 group-hover:text-ink'}">
+											{needsAction ? 'Review' : 'Open'} →
+										</span>
+									</div>
+								</div>
+
+								<!-- Demographic summary -->
+								{#if persona?.demographic_summary}
+									<p class="mb-4 line-clamp-1 text-sm leading-relaxed text-ink-3">{persona.demographic_summary}</p>
+								{/if}
+
+								<!-- Traits + mini pipeline -->
+								<div class="flex flex-wrap items-end justify-between gap-4 border-t border-rule pt-3">
+									<div class="flex flex-wrap gap-x-5 gap-y-3">
+										{#if persona?.psychological_driver}
+											<div class="flex items-start gap-2">
+												<div class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-bone/30 bg-bone/8 text-bone">
+													<Brain class="h-2.5 w-2.5" />
+												</div>
+												<div>
+													<p class="mb-0.5 text-[9px] uppercase tracking-[0.12em] text-ink-3/60">Driver</p>
+													<p class="text-[11px] text-ink-2">{persona.psychological_driver}</p>
+												</div>
+											</div>
+										{/if}
+										{#if persona?.buying_trigger}
+											<div class="flex items-start gap-2">
+												<div class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-ochre/30 bg-ochre/8 text-ochre">
+													<Zap class="h-2.5 w-2.5" />
+												</div>
+												<div>
+													<p class="mb-0.5 text-[9px] uppercase tracking-[0.12em] text-ink-3/60">Trigger</p>
+													<p class="text-[11px] text-ink-2">{persona.buying_trigger}</p>
+												</div>
+											</div>
+										{/if}
+										{#if persona?.primary_objection}
+											<div class="flex items-start gap-2">
+												<div class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-rust/25 bg-rust/8 text-rust">
+													<Shield class="h-2.5 w-2.5" />
+												</div>
+												<div>
+													<p class="mb-0.5 text-[9px] uppercase tracking-[0.12em] text-ink-3/60">Objection</p>
+													<p class="text-[11px] text-ink-2">{persona.primary_objection}</p>
+												</div>
+											</div>
+										{/if}
+										{#if persona?.preferred_tone}
+											<div class="flex items-start gap-2">
+												<div class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-moss/30 bg-moss/8 text-moss">
+													<MessageSquare class="h-2.5 w-2.5" />
+												</div>
+												<div>
+													<p class="mb-0.5 text-[9px] uppercase tracking-[0.12em] text-ink-3/60">Tone</p>
+													<p class="text-[11px] text-ink-2">{persona.preferred_tone}</p>
+												</div>
+											</div>
+										{/if}
+									</div>
+
+									<!-- Mini pipeline progress -->
+									<div class="flex shrink-0 items-center gap-2 text-[9px] uppercase tracking-[0.1em]">
+										<span class="flex items-center gap-1 {steps.research === 'done' ? 'text-moss' : steps.research === 'active' ? 'text-ochre' : 'text-ink-3/35'}">
+											<span class="h-1.5 w-1.5 rounded-full bg-current {steps.research === 'active' ? 'animate-pulse' : ''}"></span>
+											Research
+										</span>
+										<span class="h-px w-5 bg-rule"></span>
+										<span class="flex items-center gap-1 {steps.architect === 'done' ? 'text-moss' : steps.architect === 'processing' ? 'text-parchment' : 'text-ink-3/35'}">
+											<span class="h-1.5 w-1.5 rounded-full bg-current {steps.architect === 'processing' ? 'animate-pulse' : ''}"></span>
+											Architect
+										</span>
+										<span class="h-px w-5 bg-rule"></span>
+										<span class="flex items-center gap-1 {steps.design === 'done' ? 'text-moss' : steps.design === 'active' ? 'text-ochre' : 'text-ink-3/35'}">
+											<span class="h-1.5 w-1.5 rounded-full bg-current {steps.design === 'active' ? 'animate-pulse' : ''}"></span>
+											Design
+										</span>
+									</div>
+								</div>
+							</div>
+						</a>
+					{/snippet}
+
+					{#if groupedVariants.needsAction.length > 0}
+						<section class="mb-8">
+							<p class="mb-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-ochre">
+								<AlertCircle class="h-3 w-3" /> Awaiting Review
 							</p>
-							{@render variantGroup(groupedVariants.completed, false)}
-						</div>
+							<div class="space-y-2">
+								{#each groupedVariants.needsAction as v}{@render variantCard(v)}{/each}
+							</div>
+						</section>
+					{/if}
+
+					{#if groupedVariants.inProgress.length > 0}
+						<section class="mb-8">
+							<p class="mb-3 text-[10px] uppercase tracking-[0.2em] text-parchment">In Progress</p>
+							<div class="space-y-2">
+								{#each groupedVariants.inProgress as v}{@render variantCard(v)}{/each}
+							</div>
+						</section>
+					{/if}
+
+					{#if groupedVariants.draft.length > 0}
+						<section class="mb-8">
+							<p class="mb-3 text-[10px] uppercase tracking-[0.2em] text-ink-3">Not Started</p>
+							<div class="space-y-2">
+								{#each groupedVariants.draft as v}{@render variantCard(v)}{/each}
+							</div>
+						</section>
+					{/if}
+
+					{#if groupedVariants.completed.length > 0}
+						<section>
+							<p class="mb-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-moss">
+								<CheckCircle2 class="h-3 w-3" /> Completed
+							</p>
+							<div class="space-y-2">
+								{#each groupedVariants.completed as v}{@render variantCard(v)}{/each}
+							</div>
+						</section>
 					{/if}
 				{/if}
 			</div>

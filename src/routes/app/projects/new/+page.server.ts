@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
+import { superValidate, message } from 'sveltekit-superforms';
 import { zod4 as zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
@@ -23,7 +23,7 @@ export const actions: Actions = {
 		}
 
 		if (!locals.pb) {
-			return fail(503, { form, message: 'Database unavailable' });
+			return message(form, 'Database unavailable', { status: 503 });
 		}
 
 		let record;
@@ -34,8 +34,11 @@ export const actions: Actions = {
 				target_language: form.data.target_language,
 				status: 'draft'
 			});
-		} catch {
-			return fail(500, { form, message: 'Failed to create project' });
+		} catch (e: unknown) {
+			const pb = e as { message?: string; data?: Record<string, unknown>; status?: number };
+			const fieldErrors = pb.data ? JSON.stringify(pb.data) : '';
+			const detail = fieldErrors || pb.message || 'Unknown error';
+			return message(form, `PocketBase error (${pb.status ?? '?'}): ${detail}`, { status: 500 });
 		}
 
 		redirect(303, `/app/projects/${record.id}`);
