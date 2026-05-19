@@ -172,7 +172,7 @@
 				<button
 					type="button"
 					onclick={toggleAll}
-					class="text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors"
+					class="select-none text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors duration-150"
 				>
 					{allDraftSelected ? 'Deselect all' : 'Select all'}
 				</button>
@@ -201,7 +201,7 @@
 								<button
 									type="button"
 									onclick={() => editingId === v.id ? (editingId = null) : startEdit(v)}
-									class="text-[11px] tracking-[0.1em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors"
+									class="select-none text-[11px] tracking-[0.1em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors duration-150"
 								>
 									{editingId === v.id ? 'Cancel' : 'Edit'}
 								</button>
@@ -228,7 +228,7 @@
 										<button
 											type="submit"
 											disabled={deletingId === v.id}
-											class="text-[11px] tracking-[0.1em] uppercase text-rust border-b border-rust/40 pb-0.5 hover:border-rust transition-colors disabled:opacity-40"
+											class="select-none text-[11px] tracking-[0.1em] uppercase text-rust border-b border-rust/40 pb-0.5 hover:text-rust hover:border-rust transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
 										>
 											{deletingId === v.id ? '…' : 'Confirm'}
 										</button>
@@ -236,14 +236,14 @@
 									<button
 										type="button"
 										onclick={() => confirmDeleteId = null}
-										class="text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors"
+										class="select-none text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors duration-150"
 									>Cancel</button>
 								{:else}
 									<button
 										type="button"
 										onclick={() => confirmDeleteId = v.id}
 										disabled={deletingId === v.id}
-										class="text-[11px] tracking-[0.1em] uppercase text-rust/60 border-b border-rust/20 pb-0.5 hover:text-rust hover:border-rust/50 transition-colors disabled:opacity-40"
+										class="select-none text-[11px] tracking-[0.1em] uppercase text-rust/60 border-b border-rust/20 pb-0.5 hover:text-rust hover:border-rust/50 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
 									>Delete</button>
 								{/if}
 							</div>
@@ -325,14 +325,14 @@
 									<button
 										type="submit"
 										disabled={editSaving}
-										class="text-[11px] tracking-[0.15em] uppercase border-b pb-0.5 transition-colors disabled:opacity-40 {editSaving ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
+										class="select-none text-[11px] tracking-[0.15em] uppercase border-b pb-0.5 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:opacity-75 {editSaving ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
 									>
 										{editSaving ? 'Saving…' : 'Save Changes'}
 									</button>
 									<button
 										type="button"
 										onclick={() => editingId = null}
-										class="text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors"
+										class="select-none text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors duration-150"
 									>
 										Cancel
 									</button>
@@ -396,7 +396,7 @@
 					<button
 						type="submit"
 						disabled={launching || selectedIds.length === 0 || !timeframe.trim()}
-						class="text-[11px] tracking-[0.18em] uppercase border-b pb-0.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed {launching || selectedIds.length === 0 || !timeframe.trim() ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
+						class="select-none text-[11px] tracking-[0.18em] uppercase border-b pb-0.5 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:opacity-75 {launching || selectedIds.length === 0 || !timeframe.trim() ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
 					>
 						{launching ? 'Launching…' : 'Launch Research →'}
 					</button>
@@ -447,7 +447,7 @@
 						<StatusBadge status={v.status} type="variant" />
 						<a
 							href="/app/projects/{project?.id}/variants/{v.id}"
-							class="shrink-0 text-[11px] tracking-[0.1em] uppercase text-ochre hover:text-ink transition-colors"
+							class="shrink-0 text-[11px] tracking-[0.1em] uppercase text-ochre hover:text-ink transition-colors duration-150"
 						>
 							Review →
 						</a>
@@ -474,7 +474,7 @@
 						<StatusBadge status={v.status} type="variant" />
 						<a
 							href="/app/projects/{project?.id}/variants/{v.id}"
-							class="shrink-0 text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors"
+							class="shrink-0 text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors duration-150"
 						>
 							Open →
 						</a>
@@ -492,7 +492,7 @@
 
 	<!-- Back -->
 	<div class="h-px bg-rule mb-6"></div>
-	<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors border-b border-rule-2 pb-0.5">
+	<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors duration-150 border-b border-rule-2 pb-0.5">
 		← Back to Project
 	</a>
 </div>

@@ -203,7 +203,7 @@
 					<button
 						type="submit"
 						disabled={approving}
-						class="shrink-0 text-[11px] tracking-[0.18em] uppercase border-b pb-0.5 transition-colors disabled:opacity-40 {approving ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
+						class="select-none shrink-0 text-[11px] tracking-[0.18em] uppercase border-b pb-0.5 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:opacity-75 {approving ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
 					>
 						{approving ? 'Approving…' : `Approve ${variants.length} Persona${variants.length !== 1 ? 's' : ''} →`}
 					</button>
@@ -242,7 +242,7 @@
 						{/if}
 						<a
 							href="/app/projects/{project?.id}/variants/{v.id}"
-							class="ml-auto text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors"
+							class="ml-auto text-[11px] tracking-[0.1em] uppercase text-ink-3 hover:text-ink transition-colors duration-150"
 						>
 							Open →
 						</a>
@@ -267,7 +267,7 @@
 					{/each}
 				</div>
 				<div class="pt-2">
-					<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.15em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors">
+					<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.15em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors duration-150">
 						← Back to Project
 					</a>
 				</div>
@@ -322,7 +322,7 @@
 						<button
 							type="button"
 							onclick={addArea}
-							class="shrink-0 text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors self-end mb-0.5"
+							class="select-none shrink-0 text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 active:opacity-75 transition-colors duration-150 self-end mb-0.5"
 						>
 							Add
 						</button>
@@ -339,7 +339,7 @@
 									<button
 										type="button"
 										onclick={() => removeArea(i)}
-										class="text-ink-3 hover:text-rust transition-colors"
+										class="text-ink-3 hover:text-rust active:opacity-75 transition-colors duration-150"
 										aria-label="Remove {area}"
 									>
 										<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -393,7 +393,7 @@
 						<button
 							type="submit"
 							disabled={submitting || areas.length === 0}
-							class="text-[11px] tracking-[0.2em] uppercase border-b pb-0.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed {submitting || areas.length === 0 ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
+							class="select-none text-[11px] tracking-[0.2em] uppercase border-b pb-0.5 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed active:opacity-75 {submitting || areas.length === 0 ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
 						>
 							{submitting ? 'Starting…' : 'Start Persona Generation →'}
 						</button>
@@ -408,7 +408,7 @@
 
 	<!-- Back -->
 	<div class="h-px bg-rule mb-6"></div>
-	<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors border-b border-rule-2 pb-0.5">
+	<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors duration-150 border-b border-rule-2 pb-0.5">
 		← Back to Project
 	</a>
 </div>

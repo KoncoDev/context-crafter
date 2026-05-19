@@ -216,7 +216,7 @@
 						<form method="POST" action="?/retryPipeline" use:enhance>
 							<button
 								type="submit"
-								class="border-b border-rust/40 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-rust transition-colors hover:border-rust"
+								class="border-b border-rust/40 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-rust transition-colors duration-150 hover:border-rust active:opacity-75"
 							>
 								Reset to Draft
 							</button>
@@ -283,7 +283,7 @@
 					<button
 						type="button"
 						onclick={() => (activeTab = tab.id)}
-						class="relative mr-6 pb-3 pt-5 text-[11px] uppercase tracking-[0.15em] transition-colors {activeTab ===
+						class="relative mr-6 select-none pb-3 pt-5 text-[11px] uppercase tracking-[0.15em] transition-colors duration-150 active:opacity-75 {activeTab ===
 						tab.id
 							? 'border-b-2 border-ink text-ink'
 							: 'border-b-2 border-transparent text-ink-3 hover:text-ink-2'}"
@@ -393,7 +393,7 @@
 						</p>
 						<a
 							href="/app/projects/{project.id}/master"
-							class="border-b border-ink pb-0.5 text-[11px] uppercase tracking-[0.15em] text-ink transition-colors hover:border-bone hover:text-bone"
+							class="border-b border-ink pb-0.5 text-[11px] uppercase tracking-[0.15em] text-ink transition-colors duration-150 hover:border-bone hover:text-bone active:opacity-75"
 						>
 							Review Master Source →
 						</a>
@@ -433,7 +433,7 @@
 						<p class="text-sm text-ink-3">
 							Switch to the <button
 								type="button"
-								class="border-b border-rule-2 pb-0.5 text-ink-2 hover:text-ink"
+								class="border-b border-rule-2 pb-0.5 text-ink-2 transition-colors duration-150 hover:text-ink"
 								onclick={() => (activeTab = 'pipeline')}>Pipeline tab</button
 							> to run the Fact Extractor.
 						</p>
@@ -452,7 +452,7 @@
 						<form method="POST" action="?/retryPipeline" use:enhance>
 							<button
 								type="submit"
-								class="shrink-0 border-b border-rust/40 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-rust transition-colors hover:border-rust"
+								class="shrink-0 border-b border-rust/40 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-rust transition-colors duration-150 hover:border-rust active:opacity-75"
 							>
 								Reset to Draft
 							</button>
@@ -557,7 +557,7 @@
 										<button
 											type="submit"
 											disabled={triggering}
-											class="self-start border-b pb-0.5 text-[11px] uppercase tracking-[0.2em] transition-colors disabled:opacity-40 {triggering
+											class="self-start border-b pb-0.5 text-[11px] uppercase tracking-[0.2em] transition-colors duration-150 disabled:opacity-40 active:opacity-75 {triggering
 												? 'border-rule-2 text-ink-3'
 												: 'border-ink text-ink hover:border-bone hover:text-bone'}"
 										>
@@ -736,7 +736,7 @@
 								<button
 									type="submit"
 									disabled={approvingPersonas}
-									class="border-b pb-0.5 text-[11px] uppercase tracking-[0.18em] transition-colors disabled:opacity-40 {approvingPersonas
+									class="border-b pb-0.5 text-[11px] uppercase tracking-[0.18em] transition-colors duration-150 disabled:opacity-40 active:opacity-75 {approvingPersonas
 										? 'border-rule-2 text-ink-3'
 										: 'border-ink text-ink hover:border-bone hover:text-bone'}"
 								>
@@ -799,7 +799,7 @@
 									: ''} your review —
 								<button
 									type="button"
-									class="border-b border-ochre/50 pb-0.5 text-ochre hover:border-ochre"
+									class="border-b border-ochre/50 pb-0.5 text-ochre transition-colors duration-150 hover:border-ochre active:opacity-75"
 									onclick={() => (activeTab = 'variants')}>View in Variants tab</button
 								>
 							</p>
@@ -817,7 +817,7 @@
 								</p>
 								<a
 									href="/app/projects/{project.id}/research"
-									class="shrink-0 border-b border-ink pb-0.5 text-[11px] uppercase tracking-[0.15em] text-ink transition-colors hover:border-bone hover:text-bone"
+									class="shrink-0 border-b border-ink pb-0.5 text-[11px] uppercase tracking-[0.15em] text-ink transition-colors duration-150 hover:border-bone hover:text-bone active:opacity-75"
 								>
 									Launch Research →
 								</a>
@@ -840,7 +840,7 @@
 							</div>
 							{#each variants as variant}
 								<div
-									class="group grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-6 border-b border-rule py-4 transition-colors hover:border-rule-2 last:border-b-0"
+									class="group grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-6 border-b border-rule py-4 transition-colors duration-150 hover:border-rule-2 last:border-b-0"
 								>
 									<p class="font-display text-lg font-light leading-tight text-ink">
 										{getVariantLabel(variant)}
@@ -888,7 +888,7 @@
 							Generate personas in the
 							<button
 								type="button"
-								class="border-b border-rule-2 pb-0.5 text-ink-2 hover:text-ink"
+								class="border-b border-rule-2 pb-0.5 text-ink-2 transition-colors duration-150 hover:text-ink"
 								onclick={() => (activeTab = 'pipeline')}>Pipeline tab</button
 							>.
 						</p>
@@ -972,7 +972,7 @@
 							Approve personas in the
 							<button
 								type="button"
-								class="border-b border-rule-2 pb-0.5 text-ink-2 hover:text-ink"
+								class="border-b border-rule-2 pb-0.5 text-ink-2 transition-colors duration-150 hover:text-ink"
 								onclick={() => (activeTab = 'pipeline')}>Pipeline tab</button
 							>.
 						</p>
@@ -1067,7 +1067,7 @@
 		</div>
 		{#each group as variant}
 			<div
-				class="group grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-6 border-b border-rule py-4 transition-colors last:border-b-0 hover:border-rule-2"
+				class="group grid grid-cols-[1fr_auto_auto_auto] items-center gap-x-6 border-b border-rule py-4 transition-colors duration-150 last:border-b-0 hover:border-rule-2"
 			>
 				<div>
 					<p class="font-display text-lg font-light leading-tight text-ink {highlight ? '' : ''}">

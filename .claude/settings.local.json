@@ -29,7 +29,19 @@
       "Bash(findstr \"tiptap\")",
       "Bash(node *)",
       "PowerShell(npm run *)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(git merge *)",
+      "Bash(git -C .claude/worktrees/agent-a320eb5a55ef0225a diff HEAD -- src/)",
+      "Bash(git -C .claude/worktrees/agent-ac8e07b55c6072626 diff HEAD -- src/)",
+      "Bash(git status *)",
+      "Bash(cp __TRACKED_VAR__/src/routes/app/+layout.svelte src/routes/app/+layout.svelte)",
+      "Bash(cp __TRACKED_VAR__/src/routes/app/+page.svelte src/routes/app/+page.svelte)",
+      "Bash(cp __TRACKED_VAR__/src/routes/app/projects/new/+page.svelte src/routes/app/projects/new/+page.svelte)",
+      "Bash(cp __TRACKED_VAR__/src/routes/login/+page.svelte src/routes/login/+page.svelte)",
+      "Bash(cp __TRACKED_VAR__/src/routes/app/projects/[id]/variants/[variantId]/+page.svelte src/routes/app/projects/[id]/variants/[variantId]/+page.svelte)",
+      "Bash(cp __TRACKED_VAR__/src/lib/components/pipeline/ArchitectingDataView.svelte src/lib/components/pipeline/ArchitectingDataView.svelte)",
+      "Bash(cp __TRACKED_VAR__/src/lib/components/pipeline/DesigningDataView.svelte src/lib/components/pipeline/DesigningDataView.svelte)",
+      "Bash(cp __TRACKED_VAR__/src/lib/components/pipeline/MarkdownEditor.svelte src/lib/components/pipeline/MarkdownEditor.svelte)"
     ]
   }
 }

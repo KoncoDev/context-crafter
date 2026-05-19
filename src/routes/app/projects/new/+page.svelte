@@ -19,7 +19,7 @@
 <div class="mx-auto max-w-2xl">
 	<!-- Breadcrumb -->
 	<div class="flex items-center gap-2 text-[11px] tracking-[0.08em] text-ink-3 mb-10">
-		<a href="/app" class="hover:text-ink transition-colors">Projects</a>
+		<a href="/app" class="hover:text-ink transition-colors duration-150 active:opacity-75">Projects</a>
 		<span class="text-rule-2">—</span>
 		<span>New Pipeline</span>
 	</div>
@@ -107,14 +107,14 @@
 		<div class="flex items-center justify-between pt-4 border-t border-rule">
 			<a
 				href="/app"
-				class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors"
+				class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors duration-150 active:opacity-75"
 			>
 				Cancel
 			</a>
 			<button
 				type="submit"
 				disabled={$submitting}
-				class="text-[11px] tracking-[0.2em] uppercase border-b pb-0.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed {$submitting ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
+				class="select-none text-[11px] tracking-[0.2em] uppercase border-b pb-0.5 transition-colors duration-150 active:opacity-75 disabled:opacity-40 disabled:cursor-not-allowed {$submitting ? 'text-ink-3 border-rule-2' : 'text-ink border-ink hover:text-bone hover:border-bone'}"
 			>
 				{$submitting ? 'Creating…' : 'Create Pipeline →'}
 			</button>

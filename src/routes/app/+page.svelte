@@ -21,7 +21,7 @@
 			<h1 class="font-display text-6xl font-light text-ink tracking-tight leading-none">Projects</h1>
 			<a
 				href="/app/projects/new"
-				class="text-[11px] tracking-[0.18em] uppercase text-ink-3 hover:text-ink border-b border-rule-2 hover:border-ink-3 pb-0.5 transition-colors"
+				class="text-[11px] tracking-[0.18em] uppercase text-ink-3 hover:text-ink border-b border-rule-2 hover:border-ink-3 pb-0.5 transition-colors duration-150 active:opacity-75"
 			>
 				New Pipeline ↗
 			</a>
@@ -38,7 +38,7 @@
 			</p>
 			<a
 				href="/app/projects/new"
-				class="text-[11px] tracking-[0.2em] uppercase text-ink-2 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-2 transition-colors"
+				class="text-[11px] tracking-[0.2em] uppercase text-ink-2 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-2 transition-colors duration-150 active:opacity-75"
 			>
 				Start a new pipeline →
 			</a>
@@ -57,7 +57,7 @@
 		{#each projects as project}
 			<a
 				href="/app/projects/{project.id}"
-				class="group grid grid-cols-[1fr_auto_auto_auto_1rem] gap-x-8 items-center py-5 border-b border-rule hover:border-rule-2 transition-colors"
+				class="group grid grid-cols-[1fr_auto_auto_auto_1rem] gap-x-8 items-center py-5 border-b border-rule hover:border-rule-2 hover:bg-panel transition-colors duration-150 active:opacity-75 select-none"
 			>
 				<span class="font-display text-2xl font-light text-ink group-hover:text-bone transition-colors leading-tight">
 					{project.name}

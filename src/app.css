@@ -47,6 +47,17 @@
   ::selection {
     background-color: color-mix(in srgb, var(--color-bone) 25%, transparent);
   }
+
+  /* All interactive controls get pointer cursor */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  label[for] {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
 }
 
 /* ── Rich text editor (Tiptap / ProseMirror) ────────────── */

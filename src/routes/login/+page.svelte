@@ -85,7 +85,7 @@
 				<button
 					type="submit"
 					disabled={isLoggingIn}
-					class="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-ink-3 pb-0.5 text-ink-2 hover:text-ink hover:border-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+					class="select-none inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase border-b border-ink-3 pb-0.5 text-ink-2 hover:text-ink hover:border-ink transition-colors duration-150 active:opacity-75 disabled:opacity-40 disabled:cursor-not-allowed"
 				>
 					{#if isLoggingIn}
 						<svg class="h-3 w-3 animate-spin" fill="none" viewBox="0 0 24 24">

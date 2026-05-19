@@ -232,7 +232,7 @@
 					<button
 						type="button"
 						onclick={() => (showPrompt = !showPrompt)}
-						class="flex w-full items-center justify-between border border-rule px-5 py-3.5 text-left transition-colors hover:bg-panel"
+						class="select-none flex w-full items-center justify-between border border-rule px-5 py-3.5 text-left transition-colors duration-150 hover:bg-panel active:opacity-75"
 					>
 						<p class="text-[10px] tracking-[0.2em] uppercase text-ink-3">Hero Asset Prompt</p>
 						{#if showPrompt}

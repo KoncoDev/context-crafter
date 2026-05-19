@@ -128,7 +128,7 @@
 		<button
 			type="submit"
 			disabled={running}
-			class="border-b border-rule-2 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-ink-3 transition-colors hover:border-ink-3 hover:text-ink disabled:opacity-40"
+			class="select-none border-b border-rule-2 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-ink-3 transition-colors duration-150 hover:border-ink-3 hover:text-ink active:opacity-75 disabled:cursor-not-allowed disabled:opacity-40"
 		>
 			{running ? 'Rerunning…' : label}
 		</button>
@@ -297,7 +297,7 @@
 							Edit Raw JSON
 						</label>
 						<div
-							class="border border-rule bg-panel transition-colors focus-within:border-rule-2"
+							class="border border-rule bg-panel transition-colors duration-150 focus-within:border-ink-2"
 						>
 							<textarea
 								id="research_json"
@@ -329,7 +329,7 @@
 						<button
 							type="submit"
 							disabled={$researchEditSubmitting}
-							class="border-b pb-0.5 text-[11px] uppercase tracking-[0.18em] transition-colors disabled:opacity-40 {$researchEditSubmitting
+							class="select-none border-b pb-0.5 text-[11px] uppercase tracking-[0.18em] transition-colors duration-150 active:opacity-75 disabled:cursor-not-allowed disabled:opacity-40 {$researchEditSubmitting
 								? 'border-rule-2 text-ink-3'
 								: 'border-ink text-ink hover:border-bone hover:text-bone'}"
 						>
@@ -389,7 +389,7 @@
 						<button
 							type="button"
 							onclick={() => (showRawArchitecting = !showRawArchitecting)}
-							class="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3 transition-colors hover:text-ink"
+							class="select-none flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3 transition-colors duration-150 hover:text-ink active:opacity-75"
 						>
 							{showRawArchitecting ? 'Hide' : 'Show'} Raw JSON
 							{#if showRawArchitecting}
@@ -461,7 +461,7 @@
 							<button
 								type="button"
 								onclick={() => (showRawDesigning = !showRawDesigning)}
-								class="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3 transition-colors hover:text-ink"
+								class="select-none flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3 transition-colors duration-150 hover:text-ink active:opacity-75"
 							>
 								{showRawDesigning ? 'Hide' : 'Show'} Raw JSON
 								{#if showRawDesigning}
@@ -493,7 +493,7 @@
 							<button
 								type="submit"
 								disabled={approvingFinal}
-								class="border-b pb-0.5 text-[11px] uppercase tracking-[0.18em] transition-colors disabled:opacity-40 {approvingFinal
+								class="select-none border-b pb-0.5 text-[11px] uppercase tracking-[0.18em] transition-colors duration-150 active:opacity-75 disabled:cursor-not-allowed disabled:opacity-40 {approvingFinal
 									? 'border-rule-2 text-ink-3'
 									: 'border-moss text-moss hover:border-ink hover:text-ink'}"
 							>
@@ -517,7 +517,7 @@
 							<button
 								type="button"
 								onclick={() => (showRawDesigning = !showRawDesigning)}
-								class="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3 transition-colors hover:text-ink"
+								class="select-none flex items-center gap-1.5 text-[10px] uppercase tracking-[0.15em] text-ink-3 transition-colors duration-150 hover:text-ink active:opacity-75"
 							>
 								{showRawDesigning ? 'Hide' : 'Show'} Raw JSON
 								{#if showRawDesigning}
@@ -541,7 +541,7 @@
 		<div class="h-px bg-rule mb-8"></div>
 		<a
 			href="/app/projects/{project?.id}"
-			class="border-b border-rule-2 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-ink-3 transition-colors hover:text-ink"
+			class="border-b border-rule-2 pb-0.5 text-[11px] uppercase tracking-[0.12em] text-ink-3 transition-colors duration-150 hover:border-ink-3 hover:text-ink"
 		>
 			← Back to Project
 		</a>

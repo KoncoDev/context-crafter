@@ -108,7 +108,7 @@
 
 	<!-- ── Toolbar ──────────────────────────────────────────── -->
 	{#if !readonly}
-		<div class="flex flex-wrap items-center gap-0 border-b border-rule bg-panel px-3 py-1.5">
+		<div class="select-none flex flex-wrap items-center gap-0 border-b border-rule bg-panel px-3 py-1.5">
 
 			<!-- Headings -->
 			<div class="flex items-center">
@@ -274,6 +274,9 @@
 	:global(.toolbar-btn:hover) {
 		color: var(--color-ink);
 		background-color: var(--color-panel-2);
+	}
+	:global(.toolbar-btn:active) {
+		opacity: 0.75;
 	}
 	:global(.toolbar-btn--on) {
 		color: var(--color-ink) !important;

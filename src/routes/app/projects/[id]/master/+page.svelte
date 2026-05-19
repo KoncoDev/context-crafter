@@ -92,7 +92,7 @@
 					<button
 						type="button"
 						onclick={() => { isEditing = true; resubmitError = null; saveError = null; }}
-						class="text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors"
+						class="select-none text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 active:opacity-75 transition-colors duration-150"
 					>
 						Re-edit
 					</button>
@@ -100,7 +100,7 @@
 					<button
 						type="button"
 						onclick={() => { isEditing = false; masterSource = data.masterForm.data.master_source ?? ''; }}
-						class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors"
+						class="select-none text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors duration-150"
 					>
 						Cancel
 					</button>
@@ -164,7 +164,7 @@
 					<button
 						type="submit"
 						disabled={saving}
-						class="text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors disabled:opacity-40"
+						class="select-none text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 active:opacity-75 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
 					>
 						{saving ? 'Saving…' : 'Save Changes'}
 					</button>
@@ -172,7 +172,7 @@
 
 				<a
 					href="/app/projects/{project?.id}/generate-personas"
-					class="text-[11px] tracking-[0.18em] uppercase text-ink border-b border-ink pb-0.5 hover:text-bone hover:border-bone transition-colors"
+					class="text-[11px] tracking-[0.18em] uppercase text-ink border-b border-ink pb-0.5 hover:text-bone hover:border-bone active:opacity-75 transition-colors duration-150"
 				>
 					Continue to Step 02 →
 				</a>
@@ -227,7 +227,7 @@
 						<button
 							type="submit"
 							disabled={saving || resubmitting}
-							class="text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 transition-colors disabled:opacity-40"
+							class="select-none text-[11px] tracking-[0.12em] uppercase text-ink-3 border-b border-rule-2 pb-0.5 hover:text-ink hover:border-ink-3 active:opacity-75 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
 						>
 							{saving ? 'Saving…' : 'Save Changes'}
 						</button>
@@ -256,7 +256,7 @@
 						<button
 							type="submit"
 							disabled={saving || resubmitting}
-							class="text-[11px] tracking-[0.18em] uppercase text-ochre border-b border-ochre/50 pb-0.5 hover:text-ink hover:border-ink transition-colors disabled:opacity-40"
+							class="select-none text-[11px] tracking-[0.18em] uppercase text-ochre border-b border-ochre/50 pb-0.5 hover:text-ink hover:border-ink active:opacity-75 transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
 						>
 							{resubmitting ? 'Restarting…' : 'Save & Restart Step 02 →'}
 						</button>
@@ -268,7 +268,7 @@
 
 	<!-- Back -->
 	<div class="h-px bg-rule mb-6"></div>
-	<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors border-b border-rule-2 pb-0.5">
+	<a href="/app/projects/{project?.id}" class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors duration-150 border-b border-rule-2 pb-0.5">
 		← Back to Project
 	</a>
 </div>

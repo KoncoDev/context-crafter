@@ -27,9 +27,9 @@
 						{#each navItems as item}
 							<a
 								href={item.href}
-								class="px-3 py-1.5 text-[11px] tracking-[0.12em] uppercase transition-colors {$page.url.pathname === item.href
-									? 'text-ink'
-									: 'text-ink-3 hover:text-ink-2'}"
+								class="select-none px-3 py-1.5 text-[11px] tracking-[0.12em] uppercase transition-colors duration-150 rounded-sm {$page.url.pathname === item.href
+									? 'text-ink bg-panel'
+									: 'text-ink-3 hover:text-ink-2 hover:bg-panel'}"
 							>
 								{item.label}
 							</a>
@@ -44,7 +44,7 @@
 					<form method="POST" action="/logout">
 						<button
 							type="submit"
-							class="text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors"
+							class="select-none text-[11px] tracking-[0.12em] uppercase text-ink-3 hover:text-ink transition-colors duration-150 active:opacity-75"
 						>
 							Sign out
 						</button>

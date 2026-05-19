@@ -139,7 +139,7 @@
 			<div class="flex flex-wrap gap-2">
 				{#each matrix.conversion_actions as action}
 					<span
-						class="inline-flex items-center gap-2 border border-ink/20 px-3.5 py-2 text-xs tracking-wide text-ink-2 transition-colors hover:border-ink/40"
+						class="inline-flex cursor-default items-center gap-2 border border-ink/20 px-3.5 py-2 text-xs tracking-wide text-ink-2"
 					>
 						{action}
 					</span>
@@ -201,7 +201,7 @@
 						<button
 							type="button"
 							onclick={() => (showJustification = !showJustification)}
-							class="flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-ink-3 transition-colors hover:text-ink"
+							class="select-none flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-ink-3 transition-colors duration-150 hover:text-ink active:opacity-75"
 						>
 							Style Justification
 							{#if showJustification}
@@ -247,7 +247,7 @@
 						<button
 							type="button"
 							onclick={() => (showSchema = !showSchema)}
-							class="flex w-full items-center justify-between px-4 py-3 text-[10px] tracking-[0.15em] uppercase text-ink-3 transition-colors hover:bg-panel hover:text-ink"
+							class="select-none flex w-full items-center justify-between px-4 py-3 text-[10px] tracking-[0.15em] uppercase text-ink-3 transition-colors duration-150 hover:bg-panel hover:text-ink active:opacity-75"
 						>
 							<span>Schema Markup</span>
 							{#if showSchema}
