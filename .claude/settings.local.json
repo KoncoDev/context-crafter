@@ -41,7 +41,11 @@
       "Bash(cp __TRACKED_VAR__/src/routes/app/projects/[id]/variants/[variantId]/+page.svelte src/routes/app/projects/[id]/variants/[variantId]/+page.svelte)",
       "Bash(cp __TRACKED_VAR__/src/lib/components/pipeline/ArchitectingDataView.svelte src/lib/components/pipeline/ArchitectingDataView.svelte)",
       "Bash(cp __TRACKED_VAR__/src/lib/components/pipeline/DesigningDataView.svelte src/lib/components/pipeline/DesigningDataView.svelte)",
-      "Bash(cp __TRACKED_VAR__/src/lib/components/pipeline/MarkdownEditor.svelte src/lib/components/pipeline/MarkdownEditor.svelte)"
+      "Bash(cp __TRACKED_VAR__/src/lib/components/pipeline/MarkdownEditor.svelte src/lib/components/pipeline/MarkdownEditor.svelte)",
+      "Bash(grep -v \"^commit\\\\|^Author\\\\|^Date\\\\|^$\\\\|^    \")",
+      "Bash(git push *)",
+      "Bash(git branch *)",
+      "Bash(git worktree *)"
     ]
   }
 }
