@@ -28,7 +28,8 @@
       "Bash(curl -s -L http://localhost:5173/ -w \"\\\\nHTTP %{http_code}\")",
       "Bash(findstr \"tiptap\")",
       "Bash(node *)",
-      "PowerShell(npm run *)"
+      "PowerShell(npm run *)",
+      "Bash(git rm *)"
     ]
   }
 }
