@@ -1,0 +1,65 @@
+{
+    "ux_psychology": {
+        "core_trigger": "Réduire le gaspillage d’eau sans sacrifier la production.",
+        "visual_metaphor": "Un tableau de bord de parcelle avec jauges d’humidité, capteurs reliés en réseau et vannes pilotées en temps réel.",
+        "selected_styles": [
+            "Tech Forward",
+            "Grid-Core"
+        ],
+        "style_justification": "Tech Forward rassure un directeur qui veut des chiffres, car l’interface évoque la mesure en temps réel, le pilotage et le contrôle. Grid-Core apporte une lecture nette et structurée, idéale pour hiérarchiser humidité, température et salinité sans surcharge visuelle. L’ensemble projette une maîtrise technique et opérationnelle, cohérente avec une décision d’investissement fondée sur le risque et le ROI.",
+        "dynamic_pivot": "La pression hydrique à Casablanca-Settat, le niveau bas des barrages et le risque de restrictions imposent une esthétique de contrôle immédiat, précise et orientée données."
+    },
+    "seo_metadata": {
+        "meta_title": "Capteurs de sol à Casablanca | AgroSmart Morocco",
+        "meta_description": "Capteurs de sol connectés à Casablanca pour piloter l’irrigation en temps réel et réduire le gaspillage d’eau jusqu’à 40 %.",
+        "schema_markup": {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "Irrigation intelligente et gestion du stress hydrique",
+            "serviceType": "Capteurs de sol connectés pour piloter l’irrigation",
+            "description": "Capteurs de sol connectés mesurant en temps réel l’humidité, la température et la salinité du sol pour piloter l’irrigation et optimiser l’usage de l’eau.",
+            "provider": {
+                "@type": "Organization",
+                "name": "AgroSmart Morocco",
+                "url": "https://www.agrosmart.ma",
+                "email": "info@agrosmart.ma",
+                "telephone": "+212 (0) 5 35 XX XX XX",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Agropole de Meknès, Zone Industrielle Sidi Slimane",
+                    "addressCountry": "MA"
+                }
+            },
+            "areaServed": "Casablanca"
+        }
+    },
+    "targeted_messaging_matrix": {
+        "primary_hook": "À Casablanca, maîtrisez vos coûts d’eau avant les restrictions.",
+        "value_proposition": "Les capteurs de sol connectés d’AgroSmart Morocco mesurent en temps réel l’humidité, la température et la salinité pour piloter l’irrigation selon les besoins réels du sol. Vous réduisez le gaspillage d’eau jusqu’à 40 % tout en gardant un contrôle précis du goutte-à-goutte.",
+        "objection_mitigation": "Déployée sur site, calibrée pour des sols déjà testés au Souss-Massa, au Gharb et à l’Oriental, avec support sur site en moins de 4 heures en cas de panne critique et un amortissement généralement inférieur à 18 mois, la solution réduit à la fois la complexité perçue et le risque d’un ROI trop lent.",
+        "contextual_urgency": "À Casablanca-Settat, où la pression hydrique est décrite comme la plus forte au Maroc, le taux de remplissage national des barrages n’était que de 46 % au 12 janvier 2026 et la SRM a accéléré des stations monoblocs en février 2026 ; installer des capteurs de sol maintenant aide à sécuriser l’irrigation avant les pics de chaleur d’avril à juin.",
+        "feature_benefit_mapping": [
+            {
+                "feature": "Capteurs de sol connectés mesurant en temps réel l’humidité, la température et la salinité du sol",
+                "benefit": "Vous pilotez l’arrosage sur des mesures réelles, ce qui réduit le gaspillage et sécurise la décision."
+            },
+            {
+                "feature": "Automatisation du goutte-à-goutte avec pilotage à distance des vannes via une application mobile dédiée",
+                "benefit": "Vous gardez le contrôle sans déplacement et pouvez ajuster rapidement l’irrigation en cas d’écart."
+            },
+            {
+                "feature": "Déclenchement automatique basé sur l’évapotranspiration réelle",
+                "benefit": "L’eau est apportée au bon moment, selon le besoin réel des cultures, pas selon des estimations."
+            },
+            {
+                "feature": "Systèmes de brumisation automatisés pour protéger les cultures lors des pics de chaleur (Chergui)",
+                "benefit": "Vous protégez la production pendant les épisodes de chaleur, quand le stress hydrique s’intensifie."
+            }
+        ],
+        "conversion_actions": [
+            "Demander un devis",
+            "Contacter AgroSmart Morocco",
+            "Planifier un échange technique"
+        ]
+    }
+}

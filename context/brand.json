@@ -1,0 +1,46 @@
+{
+    "business": {
+        "name": "",
+        "tagline": "",
+        "shortDescription": "",
+        "longDescription": "",
+        "location": {
+            "address": "",
+            "city": "",
+            "country": ""
+        },
+        "contact": {
+            "phone": "",
+            "email": "",
+            "whatsapp": "",
+            "website": ""
+        }
+    },
+    "brand": {
+        "toneKeywords": [],
+        "visualStyleKeywords": [],
+        "colors": {
+            "primary": "",
+            "secondary": "",
+            "accent": "",
+            "background": "",
+            "text": ""
+        },
+        "fonts": {
+            "heading": "",
+            "body": ""
+        }
+    },
+    "seo": {
+        "title": "",
+        "description": "",
+        "keywords": [],
+        "ogImage": ""
+    },
+    "i18n": {
+        "defaultLang": "fr",
+        "supported": [
+            "fr"
+        ]
+    }
+}

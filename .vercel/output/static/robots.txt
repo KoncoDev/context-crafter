@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Exclude API routes
+Disallow: /api/
+
+# Exclude Auth routes
+Disallow: /auth/
+
+# Exclude Admin Dashboard (Manual update required for new routes)
+Disallow: /admin/
+
+Sitemap: https://example.com/api/sitemap.xml

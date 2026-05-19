@@ -1,0 +1,248 @@
+{
+    "$schema": "[https://json-schema.org/draft/2020-12/schema](https://json-schema.org/draft/2020-12/schema)",
+    "title": "DesignSystemAndBrandingNarrative",
+    "description": "Schema enforcing the output format for the Senior UX/UI Design Architect & Brand Strategist pipeline node. Translates structured messaging matrices and psychographic insights into a sophisticated design system.",
+    "type": "object",
+    "required": [
+        "branding_narrative",
+        "design_tokens",
+        "asset_logic"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "branding_narrative": {
+            "type": "object",
+            "description": "Synthesized brand narrative capturing sensory atmosphere, interaction principles, and high-level abstract aesthetic direction.",
+            "required": [
+                "atmosphere",
+                "ux_philosophy",
+                "abstract_anchors"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "atmosphere": {
+                    "type": "string",
+                    "description": "Derived from the visual metaphor, core trigger, and hook. Synthesizes the immediate sensory relief, Entry Emotion, and visual transition from pain point to the targeted solution."
+                },
+                "ux_philosophy": {
+                    "type": "string",
+                    "description": "Defines typography intention, motion language, exact scroll rhythm sequences, and details how multiple design styles seamlessly blend without visual noise."
+                },
+                "abstract_anchors": {
+                    "type": "array",
+                    "description": "Cultural, architectural, or environmental high-fidelity references reflecting the dynamic pivot and elevating the brand identity away from generic web clichés.",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "design_tokens": {
+            "type": "object",
+            "description": "The exact geometric and color tokens mapping the selected design styles into UI execution assets.",
+            "required": [
+                "color_palette",
+                "service_palette",
+                "typography"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "color_palette": {
+                    "type": "object",
+                    "description": "The foundation system color palette translating selected styles into concrete, accessible interfaces.",
+                    "required": [
+                        "background",
+                        "surface",
+                        "surface_elevated",
+                        "border",
+                        "text_primary",
+                        "text_secondary",
+                        "text_muted",
+                        "accent_primary",
+                        "accent_secondary",
+                        "alert",
+                        "success",
+                        "warning",
+                        "shadow"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                        "background": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Primary canvas background hex color."
+                        },
+                        "surface": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Standard component container surface hex color."
+                        },
+                        "surface_elevated": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Elevated or hovered element surface hex color."
+                        },
+                        "border": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Structural line and divider hex color."
+                        },
+                        "text_primary": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "High contrast headline and body text hex color."
+                        },
+                        "text_secondary": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Sub-headline and supporting description text hex color."
+                        },
+                        "text_muted": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Disabled states, captions, and fine print text hex color."
+                        },
+                        "accent_primary": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Dominant action indicator and focal point accent hex color."
+                        },
+                        "accent_secondary": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Secondary interactive or reinforcing element hex color."
+                        },
+                        "alert": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Error states, critical thresholds, and panic metric hex color."
+                        },
+                        "success": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Validated states, optimal targets, and nominal metric hex color."
+                        },
+                        "warning": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Cautionary thresholds, upcoming system shifts, and intermediary hex color."
+                        },
+                        "shadow": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-F]{6}$",
+                            "description": "Shadow masking and depth simulation hex color."
+                        }
+                    }
+                },
+                "service_palette": {
+                    "type": "array",
+                    "description": "Feature-to-token mappings aligning specific capabilities from the input messaging matrix to distinct categorical accents.",
+                    "minItems": 2,
+                    "maxItems": 5,
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "feature",
+                            "token"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                            "feature": {
+                                "type": "string",
+                                "description": "The specific feature title or service capability description extracted from the messaging matrix mapping."
+                            },
+                            "token": {
+                                "type": "string",
+                                "pattern": "^#[0-9A-F]{6}$",
+                                "description": "Unique mood or utility accent hex color assigned to visually isolate this specific capability."
+                            }
+                        }
+                    }
+                },
+                "typography": {
+                    "type": "array",
+                    "description": "Selected typefaces from the Google Fonts library matching structural tone parameters.",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "font",
+                            "category",
+                            "weights"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                            "font": {
+                                "type": "string",
+                                "description": "Exact valid name of the font within the current Google Fonts library."
+                            },
+                            "category": {
+                                "type": "string",
+                                "enum": [
+                                    "sans-serif",
+                                    "serif",
+                                    "display",
+                                    "monospace",
+                                    "handwriting"
+                                ],
+                                "description": "The CSS font category archetype."
+                            },
+                            "weights": {
+                                "type": "array",
+                                "description": "Numerical font weights to be imported for layout hierarchy.",
+                                "minItems": 1,
+                                "items": {
+                                    "type": "integer",
+                                    "enum": [
+                                        100,
+                                        200,
+                                        300,
+                                        400,
+                                        500,
+                                        600,
+                                        700,
+                                        800,
+                                        900
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "asset_logic": {
+            "type": "object",
+            "description": "Compositional rules, layout boundaries, and generative instructions transforming conceptual styles into frontend structures.",
+            "required": [
+                "hero_asset_prompt",
+                "structural_anti_patterns",
+                "micro_interactions"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "hero_asset_prompt": {
+                    "type": "string",
+                    "description": "High-fidelity text-to-image prompt capturing the visual metaphor and atmosphere guidelines. Must include concrete environment details, lighting instructions, camera/lens specs, color palette rules, and strict alignment parameters leaving space for layout copy."
+                },
+                "structural_anti_patterns": {
+                    "type": "array",
+                    "description": "Strict structural layout counter-directives preventing generic layout configurations and maintaining custom layout integrity.",
+                    "minItems": 2,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "micro_interactions": {
+                    "type": "array",
+                    "description": "Specific animation parameters, state behaviors, and interface motion rules that reinforce contextual utility.",
+                    "minItems": 2,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,91 @@
+{
+    "branding_narrative": {
+        "atmosphere": "The first sensation is operational relief: a live parcel dashboard appears like a control room over a field, where moisture gauges, connected probes, and valve states replace uncertainty with measurable command. For the Water-Saving Director, the entry emotion is not inspiration for its own sake, but immediate reassurance that water cost, crop risk, and irrigation timing can be governed with discipline before restrictions tighten. The visual transition moves from pressure to control: the hook frames the regional water squeeze, then the interface resolves that anxiety into a precise system of soil intelligence, remote actuation, and real-time irrigation decisions.",
+        "ux_philosophy": "The typography must feel engineered, not decorative: compact sans-serif headlines for decisiveness, highly legible body text for technical confidence, and restrained numeric emphasis for dashboard metrics. Motion language should be calm, measured, and informative—never playful—so every transition feels like telemetry, not marketing. Scroll rhythm follows a strict sequence: Hook as a hard, immediate statement; Value Prop as a quantified proof block; Features as modular operational capabilities; then ROI and risk mitigation as the final decision layer. Tech Forward and Grid-Core blend as a precise command interface: Tech Forward brings live-data authority, while Grid-Core imposes a disciplined architectural lattice that prevents visual noise and supports fast scanning under pressure.",
+        "abstract_anchors": [
+            "A municipal water operations center translated into agronomic form.",
+            "The stillness of a concrete irrigation control room at dawn.",
+            "A modern Moroccan infrastructure archive, where utility and restraint coexist.",
+            "A precision-engineered greenhouse console, stripped of ornament and built for decision-making."
+        ]
+    },
+    "design_tokens": {
+        "color_palette": {
+            "background": "#07131F",
+            "surface": "#0D1C2B",
+            "surface_elevated": "#12263A",
+            "border": "#27445F",
+            "text_primary": "#EAF2F7",
+            "text_secondary": "#A7BECE",
+            "text_muted": "#6E879A",
+            "accent_primary": "#2BB3B1",
+            "accent_secondary": "#4C7DFF",
+            "alert": "#D95F43",
+            "success": "#56C271",
+            "warning": "#E0A93B",
+            "shadow": "#02070B"
+        },
+        "service_palette": [
+            {
+                "feature": "Capteurs de sol connectés measuring real-time humidity, temperature, and salinity",
+                "token": "#2BB3B1"
+            },
+            {
+                "feature": "Automated drip irrigation with remote valve control via mobile app",
+                "token": "#4C7DFF"
+            },
+            {
+                "feature": "Automatic triggering based on real evapotranspiration",
+                "token": "#56C271"
+            },
+            {
+                "feature": "Automated misting systems for Chergui heat spikes",
+                "token": "#E0A93B"
+            }
+        ],
+        "typography": [
+            {
+                "font": "IBM Plex Sans",
+                "category": "sans-serif",
+                "weights": [
+                    400,
+                    500,
+                    600,
+                    700
+                ]
+            },
+            {
+                "font": "IBM Plex Mono",
+                "category": "sans-serif",
+                "weights": [
+                    400,
+                    500,
+                    600
+                ]
+            },
+            {
+                "font": "Inter",
+                "category": "sans-serif",
+                "weights": [
+                    400,
+                    500,
+                    600,
+                    700
+                ]
+            }
+        ]
+    },
+    "asset_logic": {
+        "hero_asset_prompt": "High-fidelity cinematic agritech dashboard scene for a premium landing page hero: a Moroccan peri-urban agricultural parcel near Casablanca visualized as a live control surface, with connected soil sensors arranged in a precise network, thin luminous data lines linking probes to irrigation valves, moisture gauges and telemetry overlays hovering above the soil, subtle water-flow indicators, and a sense of measured control over scarce resources. The environment should feel like a hybrid of field and command center, with realistic soil texture, discreet irrigation infrastructure, and technical UI overlays integrated into the composition. Lighting: cinematic rim lighting with soft overcast daylight, faint volumetric haze, controlled highlights on metal sensor bodies. Lens: 35mm prime, shallow-to-moderate depth of field, premium documentary realism. Palette: deep navy, slate blue, teal cyan, muted steel, restrained amber accents, high contrast but not neon. Composition: asymmetrical, grid-aware, left-to-right reading flow, ample negative space for headline copy, premium corporate realism, no generic farmland clichés.",
+        "structural_anti_patterns": [
+            "Avoid standard three-column feature grids; use an asymmetrical bento layout with one dominant operational metric card and secondary capability tiles.",
+            "Do not use stock imagery of smiling farmers, wheat fields, or generic sprinklers; the visual language must stay anchored in sensors, valves, and telemetry.",
+            "Avoid decorative gradients, glassmorphism overload, and playful icon sets; every component should feel instrument-grade and purpose-built."
+        ],
+        "micro_interactions": [
+            "Key water-saving metrics increment with a slow rolling-shutter reveal, as if the numbers are being read from live instrumentation.",
+            "Sensor nodes pulse in a restrained network sequence from soil probe to valve, reinforcing cause-and-effect without distracting the user.",
+            "When a feature card enters view, its border line draws itself like a technical schematic trace, then locks into a steady state."
+        ]
+    }
+}

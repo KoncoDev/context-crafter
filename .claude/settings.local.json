@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx svelte-kit *)",
+      "Bash(npx svelte-check *)",
+      "Bash(node_modules\\\\.bin\\\\svelte-kit sync *)",
+      "Bash(node -e \"const p = require\\('./node_modules/zod/package.json'\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \"const p = require\\('./node_modules/sveltekit-superforms/package.json'\\); console.log\\(p.version\\)\")",
+      "Bash(curl -s http://localhost:5173/app)",
+      "Bash(Remove-Item \"D:\\\\Projects\\\\landing-page-context-crafter\\\\src\\\\lib\\\\components\\\\layout\\\\Header.svelte\" -Force)",
+      "Bash(Remove-Item \"D:\\\\Projects\\\\landing-page-context-crafter\\\\src\\\\lib\\\\components\\\\layout\\\\Footer.svelte\" -Force)",
+      "Bash(Remove-Item \"D:\\\\Projects\\\\landing-page-context-crafter\\\\src\\\\lib\\\\components\\\\seo\\\\MetaTags.svelte\" -Force)",
+      "Bash(Remove-Item \"D:\\\\Projects\\\\landing-page-context-crafter\\\\src\\\\lib\\\\config\\\\nav.ts\" -Force)",
+      "Bash(Write-Output \"Done\")",
+      "Bash(npm show *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\(require\\('@tiptap/core/package.json'\\).version, require\\('tiptap-markdown/package.json'\\).version\\)\")",
+      "Bash(dir \"D:\\\\Projects\\\\landing-page-context-crafter\\\\src\\\\routes\\\\app\" -Recurse)",
+      "Bash(New-Item -ItemType Directory -Force \"D:\\\\Projects\\\\landing-page-context-crafter\\\\src\\\\routes\\\\app\\\\projects\\\\[id]\\\\master\")",
+      "Bash(Out-Null)",
+      "Bash(Write-Output \"done\")",
+      "Bash(findstr /i \"webhook step\")",
+      "Bash(findstr /i \"N8N\")",
+      "Bash(Get-Content .env)",
+      "Bash(Select-String \"N8N\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(curl -s -L http://localhost:5173/ -w \"\\\\nHTTP %{http_code}\")",
+      "Bash(findstr \"tiptap\")",
+      "Bash(node *)",
+      "PowerShell(npm run *)"
+    ]
+  }
+}

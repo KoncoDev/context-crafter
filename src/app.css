@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Editorial Typography ── */
+  --font-display: 'Cormorant Garamond', 'Georgia', serif;
+  --font-sans:    'DM Sans', system-ui, sans-serif;
+  --font-mono:    'DM Mono', 'Cascadia Code', 'ui-monospace', monospace;
+
+  /* Re-map Tailwind's font-weight scale so font-light = 400 (not 300) */
+  --font-weight-light:    400;
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+
+  /* ── Canvas & Surfaces ── */
+  --color-canvas:   #F8F6F2;
+  --color-panel:    #EEEAE3;
+  --color-panel-2:  #E4DED5;
+
+  /* ── Rules & Borders ── */
+  --color-rule:   #C8C2B8;
+  --color-rule-2: #B0A898;
+
+  /* ── Ink Scale ── */
+  --color-ink:   #18160E;
+  --color-ink-2: #3A3428;
+  --color-ink-3: #6A6050;
+
+  /* ── Semantic Palette ── */
+  --color-bone:      #5A4C3C;  /* muted warm brown accent */
+  --color-parchment: #6A5030;  /* AI-processing state */
+  --color-moss:      #1E5232;  /* completed / success */
+  --color-ochre:     #6A4C10;  /* review / caution */
+  --color-rust:      #721C1C;  /* error */
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.6;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-bone) 25%, transparent);
+  }
+}
+
+/* ── Rich text editor (Tiptap / ProseMirror) ────────────── */
+.rich-editor .ProseMirror {
+  outline: none;
+  min-height: 16rem;
+  caret-color: var(--color-bone);
+}
+
+.rich-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--color-ink-3);
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+}
+
+.rich-editor .ProseMirror ::selection {
+  background-color: color-mix(in srgb, var(--color-bone) 15%, transparent);
+}
+
+/* ── Markdown prose renderer ─────────────────────────────── */
+.md-prose {
+  color: var(--color-ink-2);
+  line-height: 1.8;
+  font-size: 0.9375rem;
+}
+
+.md-prose > *:first-child { margin-top: 0; }
+.md-prose > *:last-child  { margin-bottom: 0; }
+
+.md-prose h1 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-size: 1.875rem;
+  font-weight: 400;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-rule-2);
+}
+.md-prose h2 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-size: 1.375rem;
+  font-weight: 400;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.md-prose h3 {
+  color: var(--color-ink);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+.md-prose h4,
+.md-prose h5,
+.md-prose h6 {
+  color: var(--color-ink-2);
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 0.375rem;
+}
+
+.md-prose p { margin-bottom: 1rem; }
+
+.md-prose ul {
+  list-style: none;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+}
+.md-prose ul li::before {
+  content: '—';
+  color: var(--color-ink-3);
+  margin-right: 0.625rem;
+}
+.md-prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.md-prose li { margin-bottom: 0.375rem; }
+.md-prose li > ul,
+.md-prose li > ol { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+
+.md-prose strong { color: var(--color-ink); font-weight: 500; }
+.md-prose em     { font-style: italic; }
+
+.md-prose code {
+  background-color: var(--color-panel-2);
+  color: var(--color-bone);
+  padding: 0.1rem 0.375rem;
+  font-size: 0.875em;
+  font-family: var(--font-mono);
+}
+.md-prose pre {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-rule);
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+.md-prose pre code {
+  background: none;
+  padding: 0;
+  color: var(--color-ink-2);
+  font-size: 0.875rem;
+}
+
+.md-prose blockquote {
+  border-left: 2px solid var(--color-bone);
+  padding-left: 1.25rem;
+  color: var(--color-ink-3);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.125rem;
+  margin: 1.5rem 0;
+}
+
+.md-prose hr {
+  border: none;
+  border-top: 1px solid var(--color-rule);
+  margin: 2rem 0;
+}
+
+.md-prose a {
+  color: var(--color-bone);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.md-prose a:hover { color: var(--color-ink); }
+
+.md-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.875rem;
+}
+.md-prose th {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+  border-bottom: 1px solid var(--color-rule-2);
+}
+.md-prose td {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--color-rule);
+  color: var(--color-ink-2);
+}
+.md-prose tr:last-child td { border-bottom: none; }
